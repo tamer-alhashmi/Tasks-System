@@ -1,5 +1,5 @@
 import React from 'react';
-import { Clock, User, PlayCircle, CheckCircle, AlertTriangle } from 'lucide-react';
+import { Clock, User, PlayCircle, CheckCircle, AlertTriangle, MessageCircle } from 'lucide-react';
 import { TaskAssignment, Task, Employee } from '../types';
 import { formatTime, formatDuration, isOverdue } from '../utils/dateUtils';
 
@@ -12,6 +12,7 @@ interface TaskCardProps {
   onCompleteTask?: (assignmentId: string, notes: string) => void;
   onPauseTask?: (assignmentId: string) => void;
   onUpdateNotes?: (assignmentId: string, notes: string) => void;
+  onSendNotification?: () => void;
 }
 
 export const TaskCard: React.FC<TaskCardProps> = ({
@@ -22,7 +23,8 @@ export const TaskCard: React.FC<TaskCardProps> = ({
   onStartTask,
   onCompleteTask,
   onPauseTask,
-  onUpdateNotes
+  onUpdateNotes,
+  onSendNotification
 }) => {
   const getPriorityColor = () => {
     switch (task.priority) {
@@ -110,6 +112,18 @@ export const TaskCard: React.FC<TaskCardProps> = ({
       {assignment.completedAt && assignment.actualMinutes && (
         <div className="text-xs text-green-600 mb-2">
           Completed in {formatDuration(assignment.actualMinutes)}
+        </div>
+      )}
+
+      {isLeaderView && onSendNotification && assignment.status !== 'completed' && (
+        <div className="mb-3">
+          <button
+            onClick={onSendNotification}
+            className="flex items-center gap-2 w-full px-3 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors"
+          >
+            <MessageCircle className="w-4 h-4" />
+            Send Reminder
+          </button>
         </div>
       )}
 
