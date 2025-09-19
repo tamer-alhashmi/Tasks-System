@@ -3,9 +3,11 @@ import { Plus, Users, BarChart3, Archive, Calendar, Wrench, Activity } from 'luc
 import { LoginForm } from './components/LoginForm';
 import { Header } from './components/Header';
 import { UserProfile } from './components/UserProfile';
+import { AccountSettings } from './components/AccountSettings';
 import { TaskCard } from './components/TaskCard';
 import { PerformanceChart } from './components/PerformanceChart';
 import { TaskAssignmentModal } from './components/TaskAssignmentModal';
+import { TaskNotificationModal } from './components/TaskNotificationModal';
 import { HistoryView } from './components/HistoryView';
 import { EmployeeDashboard } from './components/EmployeeDashboard';
 import { TaskManagement } from './components/TaskManagement';
@@ -26,6 +28,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [showAccountSettings, setShowAccountSettings] = useState(false);
   const [loginError, setLoginError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   
@@ -36,6 +39,8 @@ function App() {
   const [dailyReports, setDailyReports] = useLocalStorage<DailyReport[]>('hospitality_reports', []);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [isAssignmentModalOpen, setIsAssignmentModalOpen] = useState(false);
+  const [selectedAssignmentForNotification, setSelectedAssignmentForNotification] = useState<TaskAssignment | null>(null);
+  const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
 
   // Handle sign up
   const handleSignUp = async (userData: any) => {
@@ -160,6 +165,12 @@ function App() {
   );
 
   const assignTask = (taskId: string, employeeId: string) => {
+    // Remove existing assignment if reassigning
+    const existingAssignmentIndex = assignments.findIndex(a => a.taskId === taskId && a.date === today);
+    if (existingAssignmentIndex >= 0) {
+      setAssignments(prev => prev.filter((_, index) => index !== existingAssignmentIndex));
+    }
+
     const newAssignment: TaskAssignment = {
       id: `assignment-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       taskId,
@@ -176,6 +187,27 @@ function App() {
     setAssignments(prev => [...prev, newAssignment]);
   };
 
+  const unassignTask = (taskId: string) => {
+    setAssignments(prev => prev.filter(a => !(a.taskId === taskId && a.date === today)));
+  };
+
+  const sendTaskNotification = (assignmentId: string, message: string, type: 'whatsapp' | 'email') => {
+    const assignment = assignments.find(a => a.id === assignmentId);
+    const employee = assignment ? employees.find(e => e.id === assignment.employeeId) : null;
+    
+    if (employee) {
+      // Simulate sending notification
+      const platform = type === 'whatsapp' ? 'WhatsApp' : 'Email';
+      alert(`${platform} notification sent to ${employee.name}:\n\n"${message}"`);
+      
+      // You could also add this to a notifications log or update the assignment with a notification timestamp
+      setAssignments(prev => prev.map(a => 
+        a.id === assignmentId 
+          ? { ...a, notes: a.notes + `\n[${new Date().toLocaleString()}] Notification sent via ${platform}` }
+          : a
+      ));
+    }
+  };
   const startTask = (assignmentId: string) => {
     setAssignments(prev =>
       prev.map(assignment =>
@@ -269,8 +301,7 @@ function App() {
   };
 
   const getAvailableTasks = () => {
-    const assignedTaskIds = new Set(todaysAssignments.map(a => a.taskId));
-    return tasks.filter(task => !assignedTaskIds.has(task.id));
+    return tasks; // Return all tasks so user can choose from any task, including reassigning
   };
 
   // If current user is an employee, show employee dashboard  
@@ -297,6 +328,7 @@ function App() {
         <Header 
           user={currentUser}
           onShowProfile={() => setShowProfile(true)}
+          onShowAccountSettings={() => setShowAccountSettings(true)}
           onLogout={handleLogout}
         />
         <EmployeeDashboard
@@ -314,6 +346,13 @@ function App() {
             user={currentUser}
             onUpdateUser={handleUpdateUser}
             onClose={() => setShowProfile(false)}
+          />
+        )}
+        {showAccountSettings && (
+          <AccountSettings
+            user={currentUser}
+            onUpdateUser={handleUpdateUser}
+            onClose={() => setShowAccountSettings(false)}
           />
         )}
       </div>
@@ -334,6 +373,7 @@ function App() {
       <Header 
         user={currentUser}
         onShowProfile={() => setShowProfile(true)}
+        onShowAccountSettings={() => setShowAccountSettings(true)}
         onLogout={handleLogout}
       />
 
@@ -434,12 +474,7 @@ function App() {
               <div className="flex gap-3">
                 <button
                   onClick={() => {
-                    const availableTasks = getAvailableTasks();
-                    if (availableTasks.length === 0) {
-                      alert('All tasks have been assigned for today.');
-                      return;
-                    }
-                    setSelectedTask(availableTasks[0]);
+                    setSelectedTask(tasks[0]);
                     setIsAssignmentModalOpen(true);
                   }}
                   className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
@@ -467,7 +502,7 @@ function App() {
                 </p>
                 <button
                   onClick={() => {
-                    setSelectedTask(getAvailableTasks()[0]);
+                    setSelectedTask(tasks[0]);
                     setIsAssignmentModalOpen(true);
                   }}
                   className="px-6 py-3 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
@@ -490,6 +525,10 @@ function App() {
                       task={task}
                       employee={employee || null}
                       isLeaderView={true}
+                      onSendNotification={() => {
+                        setSelectedAssignmentForNotification(assignment);
+                        setIsNotificationModalOpen(true);
+                      }}
                     />
                   );
                 })}
@@ -546,6 +585,15 @@ function App() {
         />
       )}
 
+      {/* Account Settings Modal */}
+      {showAccountSettings && (
+        <AccountSettings
+          user={currentUser}
+          onUpdateUser={handleUpdateUser}
+          onClose={() => setShowAccountSettings(false)}
+        />
+      )}
+
       {/* Task Assignment Modal */}
       <TaskAssignmentModal
         isOpen={isAssignmentModalOpen}
@@ -555,7 +603,22 @@ function App() {
         }}
         task={selectedTask}
         employees={employees}
+        assignments={assignments}
         onAssign={assignTask}
+        onUnassign={unassignTask}
+      />
+
+      {/* Task Notification Modal */}
+      <TaskNotificationModal
+        isOpen={isNotificationModalOpen}
+        onClose={() => {
+          setIsNotificationModalOpen(false);
+          setSelectedAssignmentForNotification(null);
+        }}
+        assignment={selectedAssignmentForNotification}
+        task={selectedAssignmentForNotification ? tasks.find(t => t.id === selectedAssignmentForNotification.taskId) || null : null}
+        employee={selectedAssignmentForNotification ? employees.find(e => e.id === selectedAssignmentForNotification.employeeId) || null : null}
+        onSendNotification={sendTaskNotification}
       />
     </div>
   );

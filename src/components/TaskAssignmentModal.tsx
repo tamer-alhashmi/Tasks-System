@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, User, Calendar, Clock } from 'lucide-react';
+import { X, User, Calendar, Clock, UserX } from 'lucide-react';
 import { Task, Employee } from '../types';
 
 interface TaskAssignmentModalProps {
@@ -7,7 +7,9 @@ interface TaskAssignmentModalProps {
   onClose: () => void;
   task: Task | null;
   employees: Employee[];
+  assignments: TaskAssignment[];
   onAssign: (taskId: string, employeeId: string) => void;
+  onUnassign?: (taskId: string) => void;
 }
 
 export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
@@ -15,11 +17,17 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
   onClose,
   task,
   employees,
+  assignments,
   onAssign
+  onUnassign
 }) => {
   const [selectedEmployee, setSelectedEmployee] = useState('');
 
   if (!isOpen || !task) return null;
+
+  // Check if task is already assigned
+  const currentAssignment = assignments.find(a => a.taskId === task.id && a.date === new Date().toISOString().split('T')[0]);
+  const currentEmployee = currentAssignment ? employees.find(e => e.id === currentAssignment.employeeId) : null;
 
   const handleAssign = () => {
     if (selectedEmployee) {
@@ -29,11 +37,20 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
     }
   };
 
+  const handleUnassign = () => {
+    if (onUnassign && currentAssignment) {
+      onUnassign(task.id);
+      onClose();
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl max-w-md w-full m-4">
         <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-xl font-semibold text-gray-900">Assign Task</h2>
+          <h2 className="text-xl font-semibold text-gray-900">
+            {currentAssignment ? 'Reassign Task' : 'Assign Task'}
+          </h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -43,6 +60,14 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
         </div>
 
         <div className="p-6">
+          {currentAssignment && currentEmployee && (
+            <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <p className="text-sm text-yellow-800">
+                Currently assigned to: <strong>{currentEmployee.name}</strong>
+              </p>
+            </div>
+          )}
+
           <div className="mb-4">
             <h3 className="font-semibold text-gray-900 mb-2">{task.name}</h3>
             <p className="text-sm text-gray-600 mb-3">{task.description}</p>
@@ -68,13 +93,15 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
 
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-3">
-              Assign to Employee
+              {currentAssignment ? 'Reassign to Employee' : 'Assign to Employee'}
             </label>
             <div className="space-y-2">
               {employees.filter(emp => emp.isActive).map(employee => (
                 <label
                   key={employee.id}
-                  className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                  className={`flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors ${
+                    currentEmployee?.id === employee.id ? 'bg-blue-50 border-blue-200' : ''
+                  }`}
                 >
                   <input
                     type="radio"
@@ -89,6 +116,11 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
                     <div>
                       <div className="font-medium text-gray-900">{employee.name}</div>
                       <div className="text-sm text-gray-500">{employee.role}</div>
+                        {currentEmployee?.id === employee.id && (
+                          <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                            Current
+                          </span>
+                        )}
                     </div>
                   </div>
                 </label>
@@ -96,19 +128,30 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
             </div>
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex gap-2">
             <button
               onClick={onClose}
-              className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
             >
               Cancel
             </button>
+            
+            {currentAssignment && onUnassign && (
+              <button
+                onClick={handleUnassign}
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors"
+              >
+                <UserX className="w-4 h-4" />
+                Unassign
+              </button>
+            )}
+            
             <button
               onClick={handleAssign}
               disabled={!selectedEmployee}
-              className="flex-1 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
             >
-              Assign Task
+              {currentAssignment ? 'Reassign Task' : 'Assign Task'}
             </button>
           </div>
         </div>

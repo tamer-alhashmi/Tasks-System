@@ -5,10 +5,11 @@ import { User as UserType } from '../types';
 interface HeaderProps {
   user: UserType;
   onShowProfile: () => void;
+  onShowAccountSettings?: () => void;
   onLogout: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ user, onShowProfile, onLogout }) => {
+export const Header: React.FC<HeaderProps> = ({ user, onShowProfile, onShowAccountSettings, onLogout }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [notifications] = useState([
     { id: 1, title: 'New task assigned', message: 'Revenue Reconciliation task assigned to you', unread: true },
@@ -18,6 +19,18 @@ export const Header: React.FC<HeaderProps> = ({ user, onShowProfile, onLogout })
   const [showNotifications, setShowNotifications] = useState(false);
   
   const unreadCount = notifications.filter(n => n.unread).length;
+
+  const markAllAsRead = () => {
+    setNotifications(prev => prev.map(n => ({ ...n, unread: false })));
+  };
+
+  const markAsRead = (id: number) => {
+    setNotifications(prev => prev.map(n => n.id === id ? { ...n, unread: false } : n));
+  };
+
+  const deleteNotification = (id: number) => {
+    setNotifications(prev => prev.filter(n => n.id !== id));
+  };
 
   return (
     <header className="bg-white shadow-sm border-b">
@@ -78,23 +91,54 @@ export const Header: React.FC<HeaderProps> = ({ user, onShowProfile, onLogout })
                   
                   <div className="max-h-64 overflow-y-auto">
                     {notifications.map(notification => (
-                      <div key={notification.id} className={`px-4 py-3 hover:bg-gray-50 transition-colors ${notification.unread ? 'bg-blue-50' : ''}`}>
+                      <div 
+                        key={notification.id} 
+                        className={`px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer ${notification.unread ? 'bg-blue-50' : ''}`}
+                        onClick={() => markAsRead(notification.id)}
+                      >
                         <div className="flex items-start gap-3">
                           <div className={`w-2 h-2 rounded-full mt-2 ${notification.unread ? 'bg-blue-500' : 'bg-gray-300'}`} />
-                          <div className="flex-1">
+                          <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium text-gray-900">{notification.title}</p>
                             <p className="text-xs text-gray-600">{notification.message}</p>
                           </div>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              deleteNotification(notification.id);
+                            }}
+                            className="text-gray-400 hover:text-red-500 text-xs"
+                          >
+                            ×
+                          </button>
                         </div>
                       </div>
                     ))}
+                    
+                    {notifications.length === 0 && (
+                      <div className="px-4 py-8 text-center text-gray-500">
+                        <Bell className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+                        <p className="text-sm">No notifications</p>
+                      </div>
+                    )}
                   </div>
                   
-                  <div className="px-4 py-2 border-t border-gray-100">
-                    <button className="text-sm text-blue-600 hover:text-blue-800 font-medium">
-                      Mark all as read
-                    </button>
-                  </div>
+                  {notifications.length > 0 && (
+                    <div className="px-4 py-2 border-t border-gray-100 flex justify-between">
+                      <button 
+                        onClick={markAllAsRead}
+                        className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                      >
+                        Mark all as read
+                      </button>
+                      <button 
+                        onClick={() => setNotifications([])}
+                        className="text-sm text-red-600 hover:text-red-800 font-medium"
+                      >
+                        Clear all
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -125,6 +169,7 @@ export const Header: React.FC<HeaderProps> = ({ user, onShowProfile, onLogout })
                   <button
                     onClick={() => {
                       onShowProfile();
+                      onShowAccountSettings?.();
                       setShowDropdown(false);
                     }}
                     className="flex items-center gap-3 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
