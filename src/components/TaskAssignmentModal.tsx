@@ -18,7 +18,7 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
   task,
   employees,
   assignments,
-  onAssign
+  onAssign,
   onUnassign
 }) => {
   const [selectedEmployee, setSelectedEmployee] = useState('');
