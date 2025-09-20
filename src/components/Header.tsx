@@ -11,7 +11,7 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ user, onShowProfile, onShowAccountSettings, onLogout }) => {
   const [showDropdown, setShowDropdown] = useState(false);
-  const [notifications] = useState([
+  const [notifications, setNotifications] = useState([
     { id: 1, title: 'New task assigned', message: 'Revenue Reconciliation task assigned to you', unread: true },
     { id: 2, title: 'Task completed', message: 'Sarah completed Card Payments task', unread: true },
     { id: 3, title: 'Daily report ready', message: 'Yesterday\'s performance report is available', unread: false }
