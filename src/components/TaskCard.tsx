@@ -56,13 +56,13 @@ export const TaskCard: React.FC<TaskCardProps> = ({
   const isTaskOverdue = isOverdue(assignment);
 
   return (
-    <div className={`rounded-lg border-2 p-4 shadow-sm transition-all hover:shadow-md ${getPriorityColor()} ${
+    <div className={`rounded-lg border-2 p-3 sm:p-4 shadow-sm transition-all hover:shadow-md ${getPriorityColor()} ${
       isTaskOverdue ? 'ring-2 ring-red-300' : ''
     }`}>
-      <div className="flex items-start justify-between mb-3">
-        <div className="flex items-center gap-2">
+      <div className="flex items-start justify-between mb-2 sm:mb-3">
+        <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
           {getStatusIcon()}
-          <span className={`text-xs font-medium px-2 py-1 rounded-full ${
+          <span className={`text-xs font-medium px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full ${
             assignment.status === 'not_started' ? 'bg-gray-100 text-gray-700' :
             assignment.status === 'in_progress' ? 'bg-blue-100 text-blue-700' :
             assignment.status === 'completed' ? 'bg-green-100 text-green-700' :
@@ -74,7 +74,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
           }`}>
             {assignment.status.replace('_', ' ').toUpperCase()}
           </span>
-          <span className={`text-xs font-medium px-2 py-1 rounded-full ${
+          <span className={`text-xs font-medium px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full ${
             task.priority === 'urgent' ? 'bg-red-100 text-red-700' :
             task.priority === 'high' ? 'bg-orange-100 text-orange-700' :
             task.priority === 'medium' ? 'bg-blue-100 text-blue-700' :
@@ -83,7 +83,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             {task.priority.toUpperCase()}
           </span>
           {isTaskOverdue && (
-            <span className="text-xs font-medium px-2 py-1 rounded-full bg-red-100 text-red-700">
+            <span className="text-xs font-medium px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full bg-red-100 text-red-700">
               OVERDUE
             </span>
           )}
@@ -93,12 +93,12 @@ export const TaskCard: React.FC<TaskCardProps> = ({
         </span>
       </div>
 
-      <h3 className="font-semibold text-gray-900 mb-2">{task.name}</h3>
-      <p className="text-sm text-gray-600 mb-3">{task.description}</p>
+      <h3 className="font-semibold text-sm sm:text-base text-gray-900 mb-2 line-clamp-2">{task.name}</h3>
+      <p className="text-xs sm:text-sm text-gray-600 mb-3 line-clamp-2">{task.description}</p>
 
-      <div className="flex items-center gap-2 mb-3">
+      <div className="flex items-center gap-2 mb-2 sm:mb-3">
         <User className="w-4 h-4 text-gray-400" />
-        <span className="text-sm text-gray-700">
+        <span className="text-xs sm:text-sm text-gray-700 truncate">
           {employee?.name || 'Unassigned'}
         </span>
       </div>
@@ -119,20 +119,21 @@ export const TaskCard: React.FC<TaskCardProps> = ({
         <div className="mb-3">
           <button
             onClick={onSendNotification}
-            className="flex items-center gap-2 w-full px-3 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors"
+            className="flex items-center justify-center gap-2 w-full px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors"
           >
             <MessageCircle className="w-4 h-4" />
-            Send Reminder
+            <span className="hidden sm:inline">Send Reminder</span>
+            <span className="sm:hidden">Remind</span>
           </button>
         </div>
       )}
 
       {!isLeaderView && (
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2">
           {assignment.status === 'not_started' && (
             <button
               onClick={() => onStartTask?.(assignment.id)}
-              className="flex-1 px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
+              className="flex-1 px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
             >
               Start Task
             </button>
@@ -142,13 +143,13 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             <>
               <button
                 onClick={handleCompleteTask}
-                className="flex-1 px-3 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors"
+                className="flex-1 px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors"
               >
                 Complete
               </button>
               <button
                 onClick={() => onPauseTask?.(assignment.id)}
-                className="px-3 py-2 text-sm font-medium text-gray-700 bg-yellow-100 rounded-md hover:bg-yellow-200 transition-colors"
+                className="px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-gray-700 bg-yellow-100 rounded-md hover:bg-yellow-200 transition-colors"
               >
                 Pause
               </button>
@@ -158,7 +159,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
           {assignment.status === 'paused' && (
             <button
               onClick={() => onStartTask?.(assignment.id)}
-              className="flex-1 px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
+              className="flex-1 px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
             >
               Resume
             </button>
@@ -167,7 +168,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
       )}
 
       {assignment.notes && (
-        <div className="mt-3 p-2 bg-white bg-opacity-50 rounded text-xs text-gray-700">
+        <div className="mt-2 sm:mt-3 p-2 bg-white bg-opacity-50 rounded text-xs text-gray-700">
           <strong>Notes:</strong> {assignment.notes}
         </div>
       )}

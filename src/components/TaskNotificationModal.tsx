@@ -67,12 +67,12 @@ export const TaskNotificationModal: React.FC<TaskNotificationModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-lg w-full">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
+      <div className="bg-white rounded-lg shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-6 border-b">
           <div className="flex items-center gap-2">
             <MessageCircle className="w-6 h-6 text-blue-600" />
-            <h2 className="text-xl font-semibold text-gray-900">Send Task Reminder</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Send Task Reminder</h2>
           </div>
           <button
             onClick={onClose}
@@ -84,13 +84,13 @@ export const TaskNotificationModal: React.FC<TaskNotificationModalProps> = ({
 
         <div className="p-6 space-y-4">
           {/* Task Info */}
-          <div className="bg-gray-50 rounded-lg p-4">
+          <div className="bg-gray-50 rounded-lg p-3 sm:p-4">
             <div className="flex items-start justify-between mb-2">
               <div>
-                <h3 className="font-medium text-gray-900">{task.name}</h3>
-                <p className="text-sm text-gray-600">Assigned to: {employee.name}</p>
+                <h3 className="font-medium text-sm sm:text-base text-gray-900">{task.name}</h3>
+                <p className="text-xs sm:text-sm text-gray-600">Assigned to: {employee.name}</p>
               </div>
-              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+              <span className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-medium flex-shrink-0 ${
                 assignment.status === 'not_started' ? 'bg-gray-100 text-gray-700' :
                 assignment.status === 'in_progress' ? 'bg-blue-100 text-blue-700' :
                 assignment.status === 'paused' ? 'bg-yellow-100 text-yellow-700' :
@@ -99,7 +99,7 @@ export const TaskNotificationModal: React.FC<TaskNotificationModalProps> = ({
                 {assignment.status.replace('_', ' ').toUpperCase()}
               </span>
             </div>
-            <div className="flex items-center gap-4 text-sm text-gray-500">
+            <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-500 flex-wrap">
               <div className="flex items-center gap-1">
                 <Clock className="w-4 h-4" />
                 <span>Assigned {getElapsedTime()}</span>
@@ -123,7 +123,7 @@ export const TaskNotificationModal: React.FC<TaskNotificationModalProps> = ({
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Send via
             </label>
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-3">
               <label className="flex items-center">
                 <input
                   type="radio"
@@ -154,7 +154,7 @@ export const TaskNotificationModal: React.FC<TaskNotificationModalProps> = ({
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Urgency Level
             </label>
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-3">
               <label className="flex items-center">
                 <input
                   type="radio"
@@ -191,7 +191,7 @@ export const TaskNotificationModal: React.FC<TaskNotificationModalProps> = ({
                   <button
                     key={index}
                     onClick={() => selectPredefinedMessage(msg)}
-                    className="w-full text-left p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors text-sm text-gray-700"
+                    className="w-full text-left p-2 sm:p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors text-xs sm:text-sm text-gray-700"
                   >
                     {msg}
                   </button>
@@ -215,8 +215,8 @@ export const TaskNotificationModal: React.FC<TaskNotificationModalProps> = ({
               <textarea
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                rows={4}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                rows={3}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-sm"
                 placeholder={`Write your message to ${employee.name}...`}
               />
               <div className="flex justify-between items-center mt-2">
@@ -237,20 +237,21 @@ export const TaskNotificationModal: React.FC<TaskNotificationModalProps> = ({
           )}
         </div>
 
-        <div className="flex gap-3 p-6 border-t">
+        <div className="flex flex-col sm:flex-row gap-3 p-4 sm:p-6 border-t">
           <button
             onClick={onClose}
-            className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
+            className="flex-1 px-4 py-2 text-xs sm:text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={handleSend}
             disabled={!message.trim()}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-2 text-xs sm:text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
           >
             <Send className="w-4 h-4" />
-            Send {notificationType === 'whatsapp' ? 'WhatsApp' : 'Email'}
+            <span className="hidden sm:inline">Send {notificationType === 'whatsapp' ? 'WhatsApp' : 'Email'}</span>
+            <span className="sm:hidden">Send</span>
           </button>
         </div>
       </div>

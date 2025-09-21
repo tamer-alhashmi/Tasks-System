@@ -45,10 +45,10 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full m-4">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
+      <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
             {currentAssignment ? 'Reassign Task' : 'Assign Task'}
           </h2>
           <button
@@ -69,10 +69,10 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
           )}
 
           <div className="mb-4">
-            <h3 className="font-semibold text-gray-900 mb-2">{task.name}</h3>
-            <p className="text-sm text-gray-600 mb-3">{task.description}</p>
+            <h3 className="font-semibold text-sm sm:text-base text-gray-900 mb-2">{task.name}</h3>
+            <p className="text-xs sm:text-sm text-gray-600 mb-3">{task.description}</p>
             
-            <div className="flex items-center gap-4 text-sm text-gray-500">
+            <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-500 flex-wrap">
               <div className="flex items-center gap-1">
                 <Clock className="w-4 h-4" />
                 <span>Est. {task.estimatedMinutes}min</span>
@@ -99,7 +99,7 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
               {employees.filter(emp => emp.isActive).map(employee => (
                 <label
                   key={employee.id}
-                  className={`flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors ${
+                  className={`flex items-center p-2 sm:p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors ${
                     currentEmployee?.id === employee.id ? 'bg-blue-50 border-blue-200' : ''
                   }`}
                 >
@@ -109,15 +109,15 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
                     value={employee.id}
                     checked={selectedEmployee === employee.id}
                     onChange={(e) => setSelectedEmployee(e.target.value)}
-                    className="mr-3"
+                    className="mr-2 sm:mr-3"
                   />
                   <div className="flex items-center gap-2">
                     <User className="w-4 h-4 text-gray-400" />
                     <div>
-                      <div className="font-medium text-gray-900">{employee.name}</div>
-                      <div className="text-sm text-gray-500">{employee.role}</div>
+                      <div className="font-medium text-sm sm:text-base text-gray-900">{employee.name}</div>
+                      <div className="text-xs sm:text-sm text-gray-500">{employee.role}</div>
                         {currentEmployee?.id === employee.id && (
-                          <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                          <span className="text-xs bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded-full">
                             Current
                           </span>
                         )}
@@ -128,10 +128,10 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
             </div>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <button
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
+              className="px-4 py-2 text-xs sm:text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
             >
               Cancel
             </button>
@@ -139,7 +139,7 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
             {currentAssignment && onUnassign && (
               <button
                 onClick={handleUnassign}
-                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors"
+                className="flex items-center justify-center gap-2 px-4 py-2 text-xs sm:text-sm font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors"
               >
                 <UserX className="w-4 h-4" />
                 Unassign
@@ -149,7 +149,7 @@ export const TaskAssignmentModal: React.FC<TaskAssignmentModalProps> = ({
             <button
               onClick={handleAssign}
               disabled={!selectedEmployee}
-              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+              className="px-4 py-2 text-xs sm:text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
             >
               {currentAssignment ? 'Reassign Task' : 'Assign Task'}
             </button>

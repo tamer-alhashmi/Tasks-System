@@ -71,27 +71,27 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onSignUp, isLoadi
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 flex items-center justify-center p-2 sm:p-4">
       <div className="max-w-md w-full">
         {/* Logo and Header */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-6 sm:mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-2xl shadow-lg mb-4">
             <Building2 className="w-8 h-8 text-blue-600" />
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">Hospitality Manager</h1>
-          <p className="text-blue-200">Income Team Task Management System</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Hospitality Manager</h1>
+          <p className="text-sm sm:text-base text-blue-200">Income Team Task Management System</p>
         </div>
 
         {/* Login Card */}
-        <div className="bg-white rounded-2xl shadow-2xl p-8">
-          <div className="mb-6">
+        <div className="bg-white rounded-2xl shadow-2xl p-4 sm:p-6 lg:p-8">
+          <div className="mb-4 sm:mb-6">
             <div className="flex items-center gap-2 mb-2">
               {isSignUpMode ? <UserPlus className="w-6 h-6 text-blue-600" /> : <User className="w-6 h-6 text-blue-600" />}
-              <h2 className="text-2xl font-bold text-gray-900">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
                 {isSignUpMode ? 'Create Account' : 'Welcome Back'}
               </h2>
             </div>
-            <p className="text-gray-600">
+            <p className="text-sm sm:text-base text-gray-600">
               {isSignUpMode ? 'Join the hospitality management team' : 'Sign in to access your dashboard'}
             </p>
           </div>
@@ -115,14 +115,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onSignUp, isLoadi
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                      className="w-full pl-10 pr-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
                       placeholder="Enter your full name"
                       required
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Phone Number
@@ -131,7 +131,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onSignUp, isLoadi
                       type="tel"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                      className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                      className="w-full px-3 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
                       placeholder="+1-555-0123"
                     />
                   </div>
@@ -143,7 +143,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onSignUp, isLoadi
                     <select
                       value={department}
                       onChange={(e) => setDepartment(e.target.value)}
-                      className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                      className="w-full px-3 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
                     >
                       <option value="">Select Department</option>
                       <option value="Revenue Management">Revenue Management</option>
@@ -162,7 +162,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onSignUp, isLoadi
                   <select
                     value={role}
                     onChange={(e) => setRole(e.target.value as 'team_leader' | 'employee')}
-                    className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-3 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
                   >
                     <option value="employee">Employee</option>
                     <option value="team_leader">Team Leader</option>
@@ -181,7 +181,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onSignUp, isLoadi
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="w-full pl-10 pr-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
                   placeholder="Enter your email"
                   required
                 />
@@ -198,7 +198,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onSignUp, isLoadi
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="w-full pl-10 pr-12 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
                   placeholder="Enter your password"
                   required
                 />
@@ -223,7 +223,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onSignUp, isLoadi
                     type={showConfirmPassword ? 'text' : 'password'}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full pl-10 pr-12 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
                     placeholder="Confirm your password"
                     required
                   />
@@ -249,7 +249,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onSignUp, isLoadi
                     type="text"
                     value={twoFactorCode}
                     onChange={(e) => setTwoFactorCode(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full pl-10 pr-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
                     placeholder="Enter 6-digit code"
                     maxLength={6}
                   />
@@ -280,7 +280,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onSignUp, isLoadi
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="w-full bg-blue-600 text-white py-2 sm:py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm sm:text-base"
             >
               {isLoading ? (isSignUpMode ? 'Creating Account...' : 'Signing in...') : (isSignUpMode ? 'Create Account' : 'Sign In')}
             </button>
@@ -301,7 +301,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onSignUp, isLoadi
 
           {/* Demo Accounts */}
           {!isSignUpMode && (
-            <div className="mt-6 pt-6 border-t border-gray-200">
+            <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200">
               <p className="text-sm text-gray-600 mb-3">Demo Accounts:</p>
               <div className="space-y-2">
                 {demoAccounts.map((account, index) => (
@@ -311,9 +311,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onSignUp, isLoadi
                       setEmail(account.email);
                       setPassword(account.password);
                     }}
-                    className="w-full text-left p-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                    className="w-full text-left p-2 sm:p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                   >
-                    <div className="text-sm font-medium text-gray-900">{account.email}</div>
+                    <div className="text-xs sm:text-sm font-medium text-gray-900 truncate">{account.email}</div>
                     <div className="text-xs text-gray-600">{account.role}</div>
                   </button>
                 ))}
@@ -323,7 +323,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onSignUp, isLoadi
         </div>
 
         {/* Footer */}
-        <div className="text-center mt-8 text-blue-200 text-sm">
+        <div className="text-center mt-6 sm:mt-8 text-blue-200 text-xs sm:text-sm">
           <p>&copy; 2024 Hospitality Manager. All rights reserved.</p>
         </div>
       </div>

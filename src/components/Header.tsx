@@ -34,23 +34,26 @@ export const Header: React.FC<HeaderProps> = ({ user, onShowProfile, onShowAccou
 
   return (
     <header className="bg-white shadow-sm border-b">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo and Title */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
             <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
               <Users className="w-5 h-5 text-white" />
             </div>
-            <div>
-              <h1 className="text-xl font-semibold text-gray-900">Hospitality Task Manager</h1>
-              <p className="text-sm text-gray-600">
+            <div className="min-w-0 flex-1">
+              <h1 className="text-sm sm:text-lg lg:text-xl font-semibold text-gray-900 truncate">
+                <span className="hidden sm:inline">Hospitality Task Manager</span>
+                <span className="sm:hidden">Task Manager</span>
+              </h1>
+              <p className="text-xs sm:text-sm text-gray-600 truncate">
                 {user.role === 'team_leader' ? 'Team Leader Dashboard' : 'Employee Dashboard'}
               </p>
             </div>
           </div>
           
           {/* Date Display */}
-          <div className="hidden md:block text-center">
+          <div className="hidden lg:block text-center mx-4">
             <p className="text-sm font-medium text-gray-900">
               {new Date().toLocaleDateString('en-US', {
                 weekday: 'long',
@@ -70,7 +73,7 @@ export const Header: React.FC<HeaderProps> = ({ user, onShowProfile, onShowAccou
           {/* User Menu */}
           <div className="flex items-center gap-4">
             {/* Notifications */}
-            <div className="relative">
+            <div className="relative flex-shrink-0">
               <button 
                 onClick={() => setShowNotifications(!showNotifications)}
                 className="relative p-2 text-gray-400 hover:text-gray-600 transition-colors"
@@ -84,7 +87,7 @@ export const Header: React.FC<HeaderProps> = ({ user, onShowProfile, onShowAccou
               </button>
               
               {showNotifications && (
-                <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                <div className="absolute right-0 mt-2 w-72 sm:w-80 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
                   <div className="px-4 py-2 border-b border-gray-100">
                     <h3 className="font-medium text-gray-900">Notifications</h3>
                   </div>
@@ -144,15 +147,15 @@ export const Header: React.FC<HeaderProps> = ({ user, onShowProfile, onShowAccou
             </div>
 
             {/* User Dropdown */}
-            <div className="relative">
+            <div className="relative flex-shrink-0">
               <button
                 onClick={() => setShowDropdown(!showDropdown)}
-                className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors"
+                className="flex items-center gap-2 sm:gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
                   <User className="w-4 h-4 text-blue-600" />
                 </div>
-                <div className="text-left hidden sm:block">
+                <div className="text-left hidden md:block">
                   <p className="text-sm font-medium text-gray-900">{user.name}</p>
                   <p className="text-xs text-gray-600">{user.role === 'team_leader' ? 'Team Leader' : 'Employee'}</p>
                 </div>

@@ -379,22 +379,23 @@ function App() {
 
       {/* Navigation */}
       <nav className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex space-x-8">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+          <div className="flex space-x-2 sm:space-x-4 lg:space-x-8 overflow-x-auto">
             {navigation.map(item => {
               const Icon = item.icon;
               return (
                 <button
                   key={item.id}
                   onClick={() => setCurrentView(item.id as any)}
-                  className={`flex items-center gap-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                  className={`flex items-center gap-1 sm:gap-2 py-4 px-2 sm:px-1 border-b-2 font-medium text-xs sm:text-sm whitespace-nowrap transition-colors ${
                     currentView === item.id
                       ? 'border-blue-500 text-blue-600'
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
-                  {item.label}
+                  <span className="hidden sm:inline">{item.label}</span>
+                  <span className="sm:hidden">{item.label.split(' ')[0]}</span>
                 </button>
               );
             })}
@@ -403,7 +404,7 @@ function App() {
       </nav>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-4 sm:py-6 lg:py-8">
         {currentView === 'dashboard' && (
           <div className="space-y-6">
             <div>
@@ -466,28 +467,30 @@ function App() {
             {/* Action Bar */}
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Today's Tasks</h2>
-                <p className="text-gray-600">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Today's Tasks</h2>
+                <p className="text-sm sm:text-base text-gray-600">
                   {todaysAssignments.length} tasks assigned, {todaysAssignments.filter(a => a.status === 'completed').length} completed
                 </p>
               </div>
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                 <button
                   onClick={() => {
                     setSelectedTask(tasks[0]);
                     setIsAssignmentModalOpen(true);
                   }}
-                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
+                  className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors whitespace-nowrap"
                 >
                   <Plus className="w-4 h-4" />
-                  Assign Task
+                  <span className="hidden sm:inline">Assign Task</span>
+                  <span className="sm:hidden">Assign</span>
                 </button>
                 <button
                   onClick={archiveDay}
-                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
+                  className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors whitespace-nowrap"
                 >
                   <Archive className="w-4 h-4" />
-                  Archive Day
+                  <span className="hidden sm:inline">Archive Day</span>
+                  <span className="sm:hidden">Archive</span>
                 </button>
               </div>
             </div>
@@ -511,7 +514,7 @@ function App() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                 {todaysAssignments.map(assignment => {
                   const task = tasks.find(t => t.id === assignment.taskId);
                   const employee = employees.find(e => e.id === assignment.employeeId);
